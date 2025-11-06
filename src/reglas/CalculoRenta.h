@@ -1,0 +1,4 @@
+#ifndef CALCULORENTA_H
+#define CALCULORENTA_H
+
+#endif //CALCULORENTA_H

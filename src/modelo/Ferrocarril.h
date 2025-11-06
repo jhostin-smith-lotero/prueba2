@@ -1,0 +1,4 @@
+#ifndef FERROCARRIL_H
+#define FERROCARRIL_H
+
+#endif //FERROCARRIL_H
