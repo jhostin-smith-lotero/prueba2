@@ -1,0 +1,9 @@
+{
+  "salario_go": 200,
+  "multa_carcel": 50,
+  "interes_hipoteca": 10,
+  "casas_banco": 32,
+  "hoteles_banco": 12,
+  "dinero_inicial": 1500,
+  "dinero_banco": 20000
+}

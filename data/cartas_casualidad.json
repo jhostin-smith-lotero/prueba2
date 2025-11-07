@@ -1,0 +1,7 @@
+[
+  {"texto": "Avanza a SALIDA", "accion": "MOVER", "valor": 0, "destino": 0, "conservar": false},
+  {"texto": "Ve directamente a la cárcel", "accion": "IR_CARCEL", "valor": 0, "destino": 10, "conservar": false},
+  {"texto": "Paga una multa de $50", "accion": "PAGAR", "valor": 50, "destino": -1, "conservar": false},
+  {"texto": "Retrocede 3 casillas", "accion": "MOVER_RELATIVO", "valor": -3, "destino": -1, "conservar": false},
+  {"texto": "Recibe $150 por servicios", "accion": "COBRAR", "valor": 150, "destino": -1, "conservar": false}
+]
