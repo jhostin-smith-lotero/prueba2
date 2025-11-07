@@ -1,4 +1,0 @@
-#ifndef CONSTRUCCION_H
-#define CONSTRUCCION_H
-
-#endif //CONSTRUCCION_H
