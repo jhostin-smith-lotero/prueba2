@@ -73,12 +73,16 @@ void Jugador::agregarPropiedad(Propiedad* propiedad) {
 }
 
 void Jugador::quitarPropiedad(Propiedad* propiedad) {
-    for (auto it = propiedades_.begin(); it != propiedades_.end(); ++it) {
+    for (std::vector<Propiedad*>::iterator it = propiedades_.begin(); it != propiedades_.end(); ++it) {
         if (*it == propiedad) {
             propiedades_.erase(it);
             break;
         }
     }
+}
+
+void Jugador::limpiarPropiedades() {
+    propiedades_.clear();
 }
 
 }

@@ -2,6 +2,9 @@
 #define CONSTRUCCION_H
 
 #include <string>
+#include "../modelo/Propiedad.h"
+#include "../modelo/Solar.h"
+#include "../modelo/Jugador.h"
 
 /**
  * @file Construccion.h
@@ -29,7 +32,7 @@ public:
      * @post Si es posible, se incrementa el número de casas y se descuenta el dinero al jugador.
      * @return true si la construcción fue exitosa, false en caso contrario.
      */
-    bool construirCasa(Propiedad* propiedad, Jugador* jugador);
+    bool construirCasa(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 
     /**
      * @brief Construye un hotel (requerirá 4 casas previas).
@@ -39,7 +42,7 @@ public:
      * @post Si es posible, se establecen 0 casas y 1 hotel (según implementación) y se descuenta monto.
      * @return true si se construye el hotel; false en caso contrario.
      */
-    bool construirHotel(Propiedad* propiedad, Jugador* jugador);
+    bool construirHotel(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 };
 
 #endif // CONSTRUCCION_H
