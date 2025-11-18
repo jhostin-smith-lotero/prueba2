@@ -6,55 +6,101 @@
 #include "Estado.h"
 #include "Reglas.h"
 #include "Turnos.h"
+#include "../modelo/Tablero.h"
+#include "../modelo/Mazo.h"
+#include "../edd/Pila.h"
+#include "../edd/TablaHash.h"
+#include "../reglas/Construccion.h"
+#include "../reglas/Hipoteca.h"
 
-/**
- * @class Juego
- * @brief Controla la lógica principal del juego Monopoly.
- */
 class Juego {
 private:
     Banco banco;
     Dado dado1, dado2;
     Estado estado;
-    Reglas reglas;
+    Reglas reglamento;
     Turnos turnos;
+    modelo::Tablero tablero;
+    modelo::Mazo mazoCasualidad;
+    modelo::Mazo mazoArca;
+    edd::TablaHash indice;
+    bool partidaIniciada;
+    bool opcionCompra;
+    int ultimoDado1;
+    int ultimoDado2;
 
 public:
-    /**
-     * @brief Constructor del juego.
-     * @pre Ninguna.
-     * @post Juego inicializado con todas las estructuras listas.
-     */
+    enum FaseTurno { DebeTirar, PostTirada };
+
+private:
+    FaseTurno fase;
+
+    struct Snapshot {
+        Banco banco;
+        Estado estado;
+        Turnos turnos;
+        FaseTurno fase;
+        bool opcionCompra;
+        int ultimoDado1;
+        int ultimoDado2;
+        std::vector<modelo::Tablero::EstadoPropiedad> propiedades;
+        modelo::Mazo mazoCasualidad;
+        modelo::Mazo mazoArca;
+    };
+
+    edd::Pila<Snapshot> historial;
+
+public:
     Juego();
 
-    /**
-     * @brief Inicializa los jugadores ingresados por el usuario.
-     * @pre El usuario debe ingresar entre 2 y 4 nombres válidos.
-     * @post Se crean cuentas y jugadores dentro del estado.
-     */
     void inicializarJugadores();
 
-    /**
-     * @brief Ejecuta un turno del juego.
-     * @pre Deben existir jugadores inicializados.
-     * @post El jugador actual lanza dados, se mueve y se evalúa la casilla.
-     */
-    void jugarTurno();
+    void lanzarDados();
+    void comprarPropiedadActual();
+    void intentarConstruir();
+    void intentarHipotecar();
+    void intentarDeshipotecar();
+    void usarCartaCarcel();
+    void pagarMultaCarcel();
+    void pasar();
+    void undo();
+    void mostrarEstado() const;
+    void resolverEspecial(modelo::Especial* especial, modelo::Jugador& jugador, int tirada);
 
-    /**
-     * @brief Muestra el estado general del juego.
-     * @pre Jugadores inicializados.
-     * @post No modifica estado.
-     */
-    void mostrarEstado();
+    bool haTerminado() const;
 
-    /**
-     * @brief Determina si el juego ya terminó.
-     * @pre Jugadores inicializados.
-     * @post No modifica estado.
-     * @return true si solo queda un jugador con saldo > 0.
-     */
-    bool haTerminado();
+    bool puedeComprar() const;
+    bool puedeConstruir() const;
+    bool puedeHipotecar() const;
+    bool puedeDeshipotecar() const;
+    bool puedePagarMulta() const;
+    bool tieneCartaSalir() const;
+    bool hayUndo() const;
+    bool puedeTirar() const;
+    bool puedePasar() const;
+
+    FaseTurno faseActual() const { return fase; }
+    modelo::Jugador& jugadorActual();
+
+    const Reglas& reglas() const { return reglamento; }
+    Reglas& reglas() { return reglamento; }
+    Banco& bancoJugador() { return banco; }
+    modelo::Tablero& tableroJuego() { return tablero; }
+    int posicionCarcel() const { return tablero.posicionCarcel(); }
+
+private:
+    void avanzarJugador(modelo::Jugador& jugador, int pasos);
+    void moverDirecto(modelo::Jugador& jugador, int destino, bool cobraGo);
+    void aplicarCarta(const modelo::Carta& carta, modelo::Jugador& jugador);
+    void cargarMazo(const std::string& ruta, modelo::Mazo& mazo, bool esArca);
+    void prepararNuevoTurno();
+    void evaluarPropiedad(modelo::Propiedad* propiedad, modelo::Jugador& jugador, int tirada);
+    void guardarEstado();
+    void restaurarEstado();
+    bool grupoCompleto(const std::string& color, const modelo::Jugador& jugador) const;
+    int valorEdificacion(const modelo::Solar* solar) const;
+    bool cumpleSimetria(const modelo::Solar* solar, const modelo::Jugador& jugador) const;
+    std::vector<modelo::Solar*> solaresConstruibles(const modelo::Jugador& jugador) const;
 };
 
 #endif

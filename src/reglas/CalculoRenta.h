@@ -14,7 +14,7 @@
  * ADAPTAR: si los nombres de métodos difieren, actualizar las llamadas en .cpp
  */
 
-class Propiedad; // forward
+namespace modelo { struct Propiedad; }
 
 /**
  * @class CalculoRenta
@@ -30,7 +30,7 @@ public:
      * @post Retorna la cantidad de dinero que debe pagar el jugador visitante.
      * @return entero con el monto de renta.
      */
-    int calcular(const Propiedad* propiedad) const;
+    int calcular(const modelo::Propiedad* propiedad) const;
 };
 
 #endif // CALCULORENTA_H
