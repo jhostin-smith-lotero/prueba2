@@ -7,6 +7,7 @@
 #include "Reglas.h"
 #include "Turnos.h"
 #include "../modelo/Tablero.h"
+#include "../modelo/Mazo.h"
 #include "../edd/Pila.h"
 #include "../edd/TablaHash.h"
 #include "../reglas/Construccion.h"
@@ -20,6 +21,8 @@ private:
     Reglas reglamento;
     Turnos turnos;
     modelo::Tablero tablero;
+    modelo::Mazo mazoCasualidad;
+    modelo::Mazo mazoArca;
     edd::TablaHash indice;
     bool partidaIniciada;
     bool opcionCompra;
@@ -41,6 +44,8 @@ private:
         int ultimoDado1;
         int ultimoDado2;
         std::vector<modelo::Tablero::EstadoPropiedad> propiedades;
+        modelo::Mazo mazoCasualidad;
+        modelo::Mazo mazoArca;
     };
 
     edd::Pila<Snapshot> historial;
@@ -60,6 +65,7 @@ public:
     void pasar();
     void undo();
     void mostrarEstado() const;
+    void resolverEspecial(modelo::Especial* especial, modelo::Jugador& jugador, int tirada);
 
     bool haTerminado() const;
 
@@ -84,6 +90,9 @@ public:
 
 private:
     void avanzarJugador(modelo::Jugador& jugador, int pasos);
+    void moverDirecto(modelo::Jugador& jugador, int destino, bool cobraGo);
+    void aplicarCarta(const modelo::Carta& carta, modelo::Jugador& jugador);
+    void cargarMazo(const std::string& ruta, modelo::Mazo& mazo, bool esArca);
     void prepararNuevoTurno();
     void evaluarPropiedad(modelo::Propiedad* propiedad, modelo::Jugador& jugador, int tirada);
     void guardarEstado();
