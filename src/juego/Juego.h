@@ -95,6 +95,7 @@ private:
     void cargarMazo(const std::string& ruta, modelo::Mazo& mazo, bool esArca);
     void prepararNuevoTurno();
     void evaluarPropiedad(modelo::Propiedad* propiedad, modelo::Jugador& jugador, int tirada);
+    modelo::Propiedad* buscarPropiedad(const std::string& nombre) const;
     void guardarEstado();
     void restaurarEstado();
     bool grupoCompleto(const std::string& color, const modelo::Jugador& jugador) const;

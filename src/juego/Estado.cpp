@@ -30,13 +30,3 @@ std::vector<modelo::Jugador> Estado::getJugadores() const {
     return jugadores;
 }
 
-void Estado::asignarPropiedad(const std::string& propiedad, const std::string& jugador) {
-    propiedades[propiedad] = jugador;
-}
-
-std::string Estado::getPropietario(const std::string& propiedad) {
-    if (propiedades.find(propiedad) != propiedades.end())
-        return propiedades[propiedad];
-    return "";
-}
-

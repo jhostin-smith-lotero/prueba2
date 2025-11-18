@@ -31,7 +31,7 @@ bool Banco::recibirDelBanco(const std::string& jugador, int monto) {
 }
 
 int Banco::getSaldo(const std::string& jugador) const {
-    std::unordered_map<std::string, int>::const_iterator it = cuentas.find(jugador);
+    std::map<std::string, int>::const_iterator it = cuentas.find(jugador);
     if (it != cuentas.end())
         return it->second;
     return 0;
