@@ -71,6 +71,10 @@ void Juego::restaurarEstado() {
 void Juego::avanzarJugador(modelo::Jugador& jugador, int pasos) {
     int posicionAnterior = jugador.posicion();
     int limite = tablero.totalCasillas();
+    if (limite <= 0) {
+        std::cout << "El tablero no tiene casillas cargadas.\n";
+        return;
+    }
     jugador.mover(pasos, limite);
     if (jugador.posicion() < posicionAnterior) {
         banco.recibirDelBanco(jugador.nombre(), reglamento.salarioGo());

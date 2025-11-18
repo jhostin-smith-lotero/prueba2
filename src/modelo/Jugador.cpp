@@ -6,6 +6,9 @@ namespace modelo {
 Jugador::Jugador(const std::string& nombre) : nombre_(nombre) {}
 
 void Jugador::mover(int pasos, int limite) {
+    if (limite <= 0) {
+        return;
+    }
     int nuevo = (posicion_ + pasos) % limite;
     if (nuevo < 0) {
         nuevo += limite;

@@ -59,6 +59,10 @@ void Tablero::crearCasillas() {
 
     FILE* f = std::fopen("data/tablero.txt", "r");
     if (!f) {
+        f = std::fopen("../data/tablero.txt", "r");
+    }
+    if (!f) {
+        std::cout << "No se pudo cargar data/tablero.txt, tablero vacío.\n";
         return;
     }
     char buffer[512];
@@ -73,22 +77,30 @@ void Tablero::crearCasillas() {
     while (std::fgets(buffer, sizeof(buffer), f)) {
         std::string linea(buffer);
         if (linea.find("\"tipo\"") != std::string::npos) {
-            std::size_t inicio = linea.find("\"");
-            inicio = linea.find("\"", inicio + 1);
-            std::size_t fin = linea.find("\"", inicio + 1);
-            tipo = linea.substr(inicio + 1, fin - inicio - 1);
+            std::size_t inicio = linea.find(":");
+            std::size_t comillas1 = linea.find("\"", inicio);
+            std::size_t comillas2 = linea.find("\"", comillas1 + 1);
+            if (comillas1 != std::string::npos && comillas2 != std::string::npos && comillas2 > comillas1) {
+                tipo = linea.substr(comillas1 + 1, comillas2 - comillas1 - 1);
+            }
         }
         if (linea.find("\"nombre\"") != std::string::npos) {
-            std::size_t inicio = linea.find(":");
+            std::size_t clave = linea.find("\"nombre\"");
+            std::size_t inicio = linea.find(":", clave);
             std::size_t comillas1 = linea.find("\"", inicio);
             std::size_t comillas2 = linea.find("\"", comillas1 + 1);
-            nombre = linea.substr(comillas1 + 1, comillas2 - comillas1 - 1);
+            if (comillas1 != std::string::npos && comillas2 != std::string::npos && comillas2 > comillas1) {
+                nombre = linea.substr(comillas1 + 1, comillas2 - comillas1 - 1);
+            }
         }
         if (linea.find("\"grupo\"") != std::string::npos) {
-            std::size_t inicio = linea.find(":");
+            std::size_t clave = linea.find("\"grupo\"");
+            std::size_t inicio = linea.find(":", clave);
             std::size_t comillas1 = linea.find("\"", inicio);
             std::size_t comillas2 = linea.find("\"", comillas1 + 1);
-            grupo = linea.substr(comillas1 + 1, comillas2 - comillas1 - 1);
+            if (comillas1 != std::string::npos && comillas2 != std::string::npos && comillas2 > comillas1) {
+                grupo = linea.substr(comillas1 + 1, comillas2 - comillas1 - 1);
+            }
         }
         if (linea.find("\"precio\"") != std::string::npos) {
             std::size_t pos = linea.find(":");
@@ -141,6 +153,11 @@ void Tablero::crearCasillas() {
         }
     }
     std::fclose(f);
+
+    if (casillas_.empty()) {
+        std::cout << "El tablero no cargó casillas, se crea una casilla GO por defecto.\n";
+        casillas_.push_back(new Especial("SALIDA", Especial::GO));
+    }
 }
 
 Casilla* Tablero::obtener(int indice) const {
