@@ -2,14 +2,8 @@
 #define HIPOTECA_H
 
 #include <string>
-
-/**
- * @file Hipoteca.h
- * @brief Lógica de hipoteca para propiedades (poner/quitar hipoteca).
- */
-
-class Propiedad;
-class Jugador;
+#include "../modelo/Propiedad.h"
+#include "../modelo/Jugador.h"
 
 /**
  * @class Hipoteca
@@ -26,7 +20,7 @@ public:
      * @post Si se hipoteca, la propiedad queda marcada y el jugador recibe dinero.
      * @return true si se realizó la hipoteca; false en caso contrario.
      */
-    bool hipotecar(Propiedad* propiedad, Jugador* jugador);
+    bool hipotecar(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 
     /**
      * @brief Cancela una hipoteca (pagar valor más interés).
@@ -36,7 +30,7 @@ public:
      * @post Si se cancela, propiedad ya no está hipotecada y se descuenta dinero del jugador.
      * @return true si se realizó la cancelación; false en caso contrario.
      */
-    bool cancelarHipoteca(Propiedad* propiedad, Jugador* jugador);
+    bool cancelarHipoteca(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 };
 
 #endif // HIPOTECA_H

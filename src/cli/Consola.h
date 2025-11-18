@@ -44,8 +44,10 @@ public:
 private:
     Comandos comandos;
     bool activo;
+    Juego* juegoActual;
 
-    void registrarComandosBase(Juego* juego);
+    void construirOpciones(Juego& juego);
+    void mostrarOpciones();
 };
 
 #endif // CONSOLA_H
