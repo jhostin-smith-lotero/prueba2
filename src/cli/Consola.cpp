@@ -1,96 +1,81 @@
 #include "Consola.h"
 #include <iostream>
-#include <algorithm>
-#include <functional>
-#include "../juego/Juego.h" // ajustar ruta según el proyecto
+#include "../juego/Juego.h"
 
-Consola::Consola() : activo(false) {}
+Consola::Consola() : activo(false), juegoActual(nullptr) {}
 
 void Consola::inicializar(Juego* juego) {
     if (!juego) return;
-    registrarComandosBase(juego);
+    juegoActual = juego;
     activo = true;
 }
 
-void Consola::registrarComandosBase(Juego* juego) {
-    // Comando: iniciar (ya se asume que juego->inicializarJugadores existe)
-    comandos.registrar("iniciar", [juego](const std::string& args){
-        juego->inicializarJugadores();
-    });
+void Consola::construirOpciones(Juego& juego) {
+    comandos.limpiar();
+    int numero = 1;
 
-    // Comando: turno -> juega un turno
-    comandos.registrar("turno", [juego](const std::string& args){
-        juego->jugarTurno();
-    });
-
-    // Comando: estado -> muestra estado
-    comandos.registrar("estado", [juego](const std::string& args){
-        juego->mostrarEstado();
-    });
-
-    // Comando: jugar (loop hasta terminar una partida completa)
-    comandos.registrar("jugar", [juego](const std::string& args){
-        while (!juego->haTerminado()) {
-            juego->jugarTurno();
+    if (juego.faseActual() == Juego::DebeTirar) {
+        comandos.agregar({numero++, Comandos::Tirar, "Tirar dados"});
+        if (juego.puedePagarMulta()) {
+            comandos.agregar({numero++, Comandos::PagarMulta, "Pagar multa y salir"});
         }
-        std::cout << "Juego finalizado.\n";
-    });
-
-    // Comando: ayuda
-    comandos.registrar("ayuda", [this](const std::string& args){
-        std::cout << "Comandos disponibles:\n";
-        for (const auto& p : comandos.listar()) {
-            std::cout << " - " << p.first << "\n";
+        if (juego.tieneCartaSalir()) {
+            comandos.agregar({numero++, Comandos::UsarCarta, "Usar carta 'Salir de la cárcel'"});
         }
-    });
+    } else {
+        if (juego.puedeComprar()) {
+            comandos.agregar({numero++, Comandos::Comprar, "Comprar esta propiedad"});
+        }
+        if (juego.puedeConstruir()) {
+            comandos.agregar({numero++, Comandos::Construir, "Construir"});
+        }
+        if (juego.puedeHipotecar()) {
+            comandos.agregar({numero++, Comandos::Hipotecar, "Hipotecar"});
+        }
+        if (juego.puedeDeshipotecar()) {
+            comandos.agregar({numero++, Comandos::Deshipotecar, "Deshipotecar"});
+        }
+        comandos.agregar({numero++, Comandos::Pasar, "Pasar turno"});
+    }
 
-    // Comando: salir
-    comandos.registrar("salir", [this](const std::string& args){
-        std::cout << "Saliendo...\n";
-        this->activo = false;
-    });
+    comandos.agregar({numero++, Comandos::Estado, "Estado"});
+    if (juego.hayUndo()) {
+        comandos.agregar({numero++, Comandos::Undo, "Undo"});
+    }
+}
 
-    // Comando: construir <propiedad>
-    comandos.registrar("construir", [juego](const std::string& args){
-        // args => nombre de la propiedad
-        // supondremos que existe un manejador en Juego para construir
-        // ADAPTAR: juego->construir(args);
-        // Si no existe, se puede invocar reglas/Construccion desde aquí.
-        std::cout << "Solicitado construir en: " << args << "\n";
-        // Intentamos método en Juego (si existe)
-        // ADAPTAR: si no lo tienes, conecta con Construccion.cpp
-        // ejemplo:
-        // juego->construir(args);
-    });
-
-    // Comando: hipotecar <propiedad>
-    comandos.registrar("hipotecar", [juego](const std::string& args){
-        std::cout << "Solicitado hipotecar: " << args << "\n";
-        // ADAPTAR: juego->hipotecar(args);
-    });
-
-    // Comando: comprar <propiedad>
-    comandos.registrar("comprar", [juego](const std::string& args){
-        std::cout << "Solicitado comprar: " << args << "\n";
-        // ADAPTAR: juego->comprarPropiedad(args);
-    });
+void Consola::mostrarOpciones() {
+    const std::vector<Comandos::EntradaMenu>& ops = comandos.opciones();
+    for (std::size_t i = 0; i < ops.size(); ++i) {
+        std::cout << ops[i].numero << ". " << ops[i].texto << "\n";
+    }
 }
 
 void Consola::run() {
-    if (!activo) {
-        std::cerr << "Consola no inicializada. Llama a inicializar(juego) antes.\n";
+    if (!activo || !juegoActual) {
+        std::cerr << "Consola no inicializada.\n";
         return;
     }
-    std::string linea;
-    std::cout << "Bienvenido al Monopoly CLI. Escribe 'ayuda' para ver comandos.\n";
-    while (activo) {
-        std::cout << "> ";
-        if (!std::getline(std::cin, linea)) break;
-        // trim
-        linea.erase(linea.find_last_not_of(" \n\r\t")+1);
-        if (linea.empty()) continue;
-        if (!comandos.ejecutar(linea)) {
-            std::cout << "Comando no reconocido. Escribe 'ayuda'.\n";
+    juegoActual->inicializarJugadores();
+    std::cout << "Bienvenido al Monopoly en consola.\n";
+    while (activo && !juegoActual->haTerminado()) {
+        modelo::Jugador& j = juegoActual->jugadorActual();
+        std::cout << "Turno: " << j.nombre() << " | Dinero $" << juegoActual->bancoJugador().getSaldo(j.nombre())
+                  << " | Posicion " << j.posicion() << "\n";
+        juegoActual->tableroJuego().describirCasilla(j.posicion());
+        construirOpciones(*juegoActual);
+        mostrarOpciones();
+        std::cout << "Selecciona una opción (0 para salir): ";
+        int opcion = 0;
+        std::cin >> opcion;
+        if (!std::cin) break;
+        if (opcion == 0) {
+            activo = false;
+            break;
+        }
+        if (!comandos.ejecutar(opcion, *juegoActual)) {
+            std::cout << "Opción inválida.\n";
         }
     }
+    std::cout << "Juego terminado.\n";
 }
