@@ -4,16 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-
-/**
- * @struct Jugador
- * @brief Representa la información básica de un jugador.
- */
-struct Jugador {
-    std::string nombre;
-    int posicion;
-    bool enCarcel;
-};
+#include "../modelo/Jugador.h"
 
 /**
  * @class Estado
@@ -21,7 +12,7 @@ struct Jugador {
  */
 class Estado {
 private:
-    std::vector<Jugador> jugadores;
+    std::vector<modelo::Jugador> jugadores;
     int turnoActual;
     std::unordered_map<std::string, std::string> propiedades;
 
@@ -45,7 +36,12 @@ public:
      * @pre Debe existir al menos un jugador agregado.
      * @post No modifica estado.
      */
-    Jugador& getJugadorActual();
+    modelo::Jugador& getJugadorActual();
+
+    /**
+     * @brief Obtiene el jugador del turno actual (versión const).
+     */
+    const modelo::Jugador& getJugadorActualConst() const;
 
     /**
      * @brief Avanza al siguiente turno.
@@ -66,7 +62,7 @@ public:
      * @pre Ninguna.
      * @post No modifica estado.
      */
-    std::vector<Jugador> getJugadores() const;
+    std::vector<modelo::Jugador> getJugadores() const;
 
     /**
      * @brief Asigna una propiedad a un jugador.

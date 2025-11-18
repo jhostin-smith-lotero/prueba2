@@ -1,31 +1,36 @@
 #include "Comandos.h"
-#include <sstream>
+#include "../juego/Juego.h"
 
 Comandos::Comandos() {}
 
-void Comandos::registrar(const std::string& nombre, std::function<void(const std::string&)> accion) {
-    if (nombre.empty() || !accion) return;
-    tabla[nombre] = accion;
+void Comandos::limpiar() {
+    lista.clear();
 }
 
-bool Comandos::ejecutar(const std::string& linea) const {
-    std::istringstream iss(linea);
-    std::string cmd;
-    iss >> cmd;
-    if (cmd.empty()) return false;
-
-    auto it = tabla.find(cmd);
-    if (it == tabla.end()) return false;
-
-    std::string resto;
-    std::getline(iss, resto);
-    // trim leading spaces
-    if (!resto.empty() && resto.front() == ' ') resto.erase(0, 1);
-
-    it->second(resto);
-    return true;
+void Comandos::agregar(const EntradaMenu& entrada) {
+    lista.push_back(entrada);
 }
 
-std::map<std::string, std::function<void(const std::string&)>> Comandos::listar() const {
-    return tabla;
+bool Comandos::ejecutar(int numero, Juego& juego) {
+    for (std::size_t i = 0; i < lista.size(); ++i) {
+        if (lista[i].numero == numero) {
+            Accion accion = lista[i].accion;
+            if (accion == Tirar) juego.lanzarDados();
+            else if (accion == Comprar) juego.comprarPropiedadActual();
+            else if (accion == Construir) juego.intentarConstruir();
+            else if (accion == Hipotecar) juego.intentarHipotecar();
+            else if (accion == Deshipotecar) juego.intentarDeshipotecar();
+            else if (accion == Estado) juego.mostrarEstado();
+            else if (accion == Undo) juego.undo();
+            else if (accion == Pasar) juego.pasar();
+            else if (accion == UsarCarta) juego.usarCartaCarcel();
+            else if (accion == PagarMulta) juego.pagarMultaCarcel();
+            return true;
+        }
+    }
+    return false;
+}
+
+const std::vector<Comandos::EntradaMenu>& Comandos::opciones() const {
+    return lista;
 }

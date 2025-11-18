@@ -6,6 +6,9 @@
 #include "Estado.h"
 #include "Reglas.h"
 #include "Turnos.h"
+#include "../modelo/Tablero.h"
+#include "../edd/Pila.h"
+#include "../edd/TablaHash.h"
 
 /**
  * @class Juego
@@ -18,6 +21,32 @@ private:
     Estado estado;
     Reglas reglas;
     Turnos turnos;
+    modelo::Tablero tablero;
+    edd::TablaHash indice;
+    bool partidaIniciada;
+    bool dadosLanzados;
+    bool opcionCompra;
+    int ultimoDado1;
+    int ultimoDado2;
+
+public:
+    enum FaseTurno { DebeTirar, PostTirada };
+
+private:
+    FaseTurno fase;
+
+    struct Snapshot {
+        Banco banco;
+        Estado estado;
+        Turnos turnos;
+        FaseTurno fase;
+        bool dadosLanzados;
+        bool opcionCompra;
+        int ultimoDado1;
+        int ultimoDado2;
+    };
+
+    edd::Pila<Snapshot> historial;
 
 public:
     /**
@@ -39,14 +68,22 @@ public:
      * @pre Deben existir jugadores inicializados.
      * @post El jugador actual lanza dados, se mueve y se evalúa la casilla.
      */
-    void jugarTurno();
+    void lanzarDados();
+    void comprarPropiedadActual();
+    void intentarConstruir();
+    void intentarHipotecar();
+    void intentarDeshipotecar();
+    void usarCartaCarcel();
+    void pagarMultaCarcel();
+    void pasar();
+    void undo();
 
     /**
      * @brief Muestra el estado general del juego.
      * @pre Jugadores inicializados.
      * @post No modifica estado.
      */
-    void mostrarEstado();
+    void mostrarEstado() const;
 
     /**
      * @brief Determina si el juego ya terminó.
@@ -54,7 +91,27 @@ public:
      * @post No modifica estado.
      * @return true si solo queda un jugador con saldo > 0.
      */
-    bool haTerminado();
+    bool haTerminado() const;
+
+    bool puedeComprar() const;
+    bool puedeConstruir() const;
+    bool puedeHipotecar() const;
+    bool puedeDeshipotecar() const;
+    bool puedePagarMulta() const;
+    bool tieneCartaSalir() const;
+    bool hayUndo() const;
+    bool puedeTirar() const;
+    bool puedePasar() const;
+
+    FaseTurno faseActual() const { return fase; }
+    modelo::Jugador& jugadorActual();
+
+private:
+    void avanzarJugador(modelo::Jugador& jugador, int pasos);
+    void prepararNuevoTurno();
+    void evaluarPropiedad(modelo::Propiedad* propiedad, modelo::Jugador& jugador, int tirada);
+    void guardarEstado();
+    void restaurarEstado();
 };
 
 #endif
