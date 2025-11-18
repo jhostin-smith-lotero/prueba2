@@ -1,7 +1,0 @@
-[
-  {"texto": "Recibe $200 por la venta de una propiedad", "accion": "COBRAR", "valor": 200, "destino": -1, "conservar": false},
-  {"texto": "Paga $50 por gastos médicos", "accion": "PAGAR", "valor": 50, "destino": -1, "conservar": false},
-  {"texto": "Has sido elegido presidente del consejo. Paga $100", "accion": "PAGAR", "valor": 100, "destino": -1, "conservar": false},
-  {"texto": "Recibe $100 por intereses del banco", "accion": "COBRAR", "valor": 100, "destino": -1, "conservar": false},
-  {"texto": "Carta para salir de la cárcel gratis", "accion": "SALIR_CARCEL", "valor": 0, "destino": -1, "conservar": true}
-]

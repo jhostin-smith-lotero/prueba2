@@ -1,31 +1,42 @@
-#pragma once
+#ifndef HIPOTECA_H
+#define HIPOTECA_H
 
 #include <string>
 
-namespace juego {
-class Banco;
-}
+/**
+ * @file Hipoteca.h
+ * @brief Lógica de hipoteca para propiedades (poner/quitar hipoteca).
+ */
 
-namespace modelo {
-class Jugador;
 class Propiedad;
-}
+class Jugador;
 
-namespace reglas {
-
+/**
+ * @class Hipoteca
+ * @brief Gestiona hipotecar y cancelar hipoteca en propiedades.
+ */
 class Hipoteca {
 public:
-    static bool hipotecar(modelo::Propiedad& propiedad,
-                           modelo::Jugador& jugador,
-                           juego::Banco& banco,
-                           int interes,
-                           std::string& mensaje);
+    /**
+     * @brief Hipoteca una propiedad, entregando al dueño un porcentaje del precio.
+     * @param propiedad Puntero a la propiedad a hipotecar.
+     * @param jugador Jugador que solicita la hipoteca.
+     * @pre propiedad y jugador no nulos.
+     * @pre propiedad debe pertenecer al jugador y no estar ya hipotecada.
+     * @post Si se hipoteca, la propiedad queda marcada y el jugador recibe dinero.
+     * @return true si se realizó la hipoteca; false en caso contrario.
+     */
+    bool hipotecar(Propiedad* propiedad, Jugador* jugador);
 
-    static bool deshipotecar(modelo::Propiedad& propiedad,
-                              modelo::Jugador& jugador,
-                              juego::Banco& banco,
-                              int interes,
-                              std::string& mensaje);
+    /**
+     * @brief Cancela una hipoteca (pagar valor más interés).
+     * @param propiedad Puntero a la propiedad cuya hipoteca se cancela.
+     * @param jugador Jugador que cancela la hipoteca.
+     * @pre propiedad debe estar hipotecada y pertenecer al jugador.
+     * @post Si se cancela, propiedad ya no está hipotecada y se descuenta dinero del jugador.
+     * @return true si se realizó la cancelación; false en caso contrario.
+     */
+    bool cancelarHipoteca(Propiedad* propiedad, Jugador* jugador);
 };
 
-} // namespace reglas
+#endif // HIPOTECA_H

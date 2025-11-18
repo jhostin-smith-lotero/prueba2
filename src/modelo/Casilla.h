@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef CASILLA_H
+#define CASILLA_H
 #include <string>
 
 namespace juego {
@@ -10,11 +10,11 @@ namespace modelo {
 
 class Jugador;
 
-class Casilla {
+struct Casilla {
 public:
     enum class Tipo { ESPECIAL, SOLAR, FERROCARRIL, SERVICIO };
 
-    explicit Casilla(std::string nombre, Tipo tipo) : nombre_(std::move(nombre)), tipo_(tipo) {}
+    explicit Casilla(const std::string& nombre, Tipo tipo) : nombre_(nombre), tipo_(tipo) {}
     virtual ~Casilla() = default;
 
     const std::string& nombre() const { return nombre_; }
@@ -27,4 +27,5 @@ protected:
     Tipo tipo_;
 };
 
-} // namespace modelo
+}
+#endif //CASILLA_H

@@ -1,12 +1,9 @@
 #include "Jugador.h"
-
 #include "Propiedad.h"
-
-#include <algorithm>
 
 namespace modelo {
 
-Jugador::Jugador(std::string nombre) : nombre_(std::move(nombre)) {}
+Jugador::Jugador(const std::string& nombre) : nombre_(nombre) {}
 
 void Jugador::mover(int pasos, int limite) {
     int nuevo = (posicion_ + pasos) % limite;
@@ -76,10 +73,12 @@ void Jugador::agregarPropiedad(Propiedad* propiedad) {
 }
 
 void Jugador::quitarPropiedad(Propiedad* propiedad) {
-    auto it = std::find(propiedades_.begin(), propiedades_.end(), propiedad);
-    if (it != propiedades_.end()) {
-        propiedades_.erase(it);
+    for (auto it = propiedades_.begin(); it != propiedades_.end(); ++it) {
+        if (*it == propiedad) {
+            propiedades_.erase(it);
+            break;
+        }
     }
 }
 
-} // namespace modelo
+}

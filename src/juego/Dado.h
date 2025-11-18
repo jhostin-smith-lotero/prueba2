@@ -1,18 +1,18 @@
-#pragma once
+#ifndef DADO_H
+#define DADO_H
 
-#include <random>
-#include <utility>
-
-namespace juego {
-
+/**
+ * @class Dado
+ * @brief Representa un dado de seis caras.
+ */
 class Dado {
 public:
-    Dado();
-    std::pair<int, int> lanzar();
-
-private:
-    std::mt19937 rng_;
-    std::uniform_int_distribution<int> dist_;
+    /**
+     * @brief Lanza el dado.
+     * @pre srand() debe ser llamado al inicio del programa para mejorar aleatoriedad.
+     * @post Retorna un número entre 1 y 6 sin modificar estado interno.
+     */
+    int lanzar();
 };
 
-} // namespace juego
+#endif

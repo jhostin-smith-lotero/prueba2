@@ -1,58 +1,33 @@
 #include "Banco.h"
+#include <iostream>
 
-#include "../modelo/Jugador.h"
+Banco::Banco() {}
 
-namespace juego {
-
-void Banco::inicializar(int efectivo, int casasDisponibles, int hotelesDisponibles) {
-    efectivo_ = efectivo;
-    casasDisponibles_ = casasDisponibles;
-    hotelesDisponibles_ = hotelesDisponibles;
+void Banco::crearCuenta(const std::string& jugador, int montoInicial) {
+    cuentas[jugador] = montoInicial;
 }
 
-void Banco::ajustarEfectivo(int delta) {
-    efectivo_ += delta;
-}
-
-bool Banco::pagarAJugador(modelo::Jugador& jugador, int monto) {
-    if (efectivo_ < monto) {
-        return false;
-    }
-    efectivo_ -= monto;
-    jugador.cobrar(monto);
+bool Banco::transferir(const std::string& origen, const std::string& destino, int monto) {
+    if (cuentas[origen] < monto) return false;
+    cuentas[origen] -= monto;
+    cuentas[destino] += monto;
     return true;
 }
 
-bool Banco::cobrarAJugador(modelo::Jugador& jugador, int monto) {
-    if (!jugador.pagar(monto)) {
-        return false;
-    }
-    efectivo_ += monto;
+bool Banco::pagarBanco(const std::string& jugador, int monto) {
+    if (cuentas[jugador] < monto) return false;
+    cuentas[jugador] -= monto;
     return true;
 }
 
-bool Banco::tomarCasas(int cantidad) {
-    if (casasDisponibles_ < cantidad) {
-        return false;
-    }
-    casasDisponibles_ -= cantidad;
+bool Banco::recibirDelBanco(const std::string& jugador, int monto) {
+    cuentas[jugador] += monto;
     return true;
 }
 
-void Banco::devolverCasas(int cantidad) {
-    casasDisponibles_ += cantidad;
+int Banco::getSaldo(const std::string& jugador) const {
+    auto it = cuentas.find(jugador);
+    if (it != cuentas.end())
+        return it->second;
+    return 0;
 }
-
-bool Banco::tomarHoteles(int cantidad) {
-    if (hotelesDisponibles_ < cantidad) {
-        return false;
-    }
-    hotelesDisponibles_ -= cantidad;
-    return true;
-}
-
-void Banco::devolverHoteles(int cantidad) {
-    hotelesDisponibles_ += cantidad;
-}
-
-} // namespace juego

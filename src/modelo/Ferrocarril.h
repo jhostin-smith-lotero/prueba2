@@ -1,14 +1,4 @@
-#pragma once
+#ifndef FERROCARRIL_H
+#define FERROCARRIL_H
 
-#include "Propiedad.h"
-
-namespace modelo {
-
-class Ferrocarril : public Propiedad {
-public:
-    explicit Ferrocarril(std::string nombre, Escritura escritura);
-
-    int calcularRenta(int /*tirada*/, int /*grupo*/, int /*servicios*/, int ferrocarriles) const override;
-};
-
-} // namespace modelo
+#endif //FERROCARRIL_H

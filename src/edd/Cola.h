@@ -1,43 +1,98 @@
-#pragma once
-
-#include <deque>
+#ifndef COLA_H
+#define COLA_H
+#include <cstddef>
 
 namespace edd {
 
 template <typename T>
-class Cola {
+struct Cola {
 public:
-    void enqueue(const T& valor) {
-        datos_.push_back(valor);
+    Cola() : frente_(nullptr), fondo_(nullptr), tam_(0) {}
+
+    Cola(const Cola& other) : frente_(nullptr), fondo_(nullptr), tam_(0) {
+        copiarDesde(other);
     }
 
-    void enqueue(T&& valor) {
-        datos_.push_back(std::move(valor));
+    Cola& operator=(const Cola& other) {
+        if (this != &other) {
+            clear();
+            copiarDesde(other);
+        }
+        return *this;
+    }
+
+    ~Cola() {
+        clear();
+    }
+
+    void enqueue(const T& valor) {
+        Nodo* nuevo = new Nodo();
+        nuevo->valor = valor;
+        nuevo->siguiente = nullptr;
+        enlazarNuevo(nuevo);
     }
 
     bool dequeue(T& out) {
-        if (datos_.empty()) {
+        if (!frente_) {
             return false;
         }
-        out = std::move(datos_.front());
-        datos_.pop_front();
+        Nodo* actual = frente_;
+        out = actual->valor;
+        frente_ = actual->siguiente;
+        if (!frente_) {
+            fondo_ = nullptr;
+        }
+        delete actual;
+        --tam_;
         return true;
     }
 
     bool vacia() const {
-        return datos_.empty();
+        return frente_ == nullptr;
     }
 
     std::size_t tam() const {
-        return datos_.size();
+        return tam_;
     }
 
     void clear() {
-        datos_.clear();
+        while (frente_) {
+            Nodo* actual = frente_;
+            frente_ = actual->siguiente;
+            delete actual;
+        }
+        fondo_ = nullptr;
+        tam_ = 0;
     }
 
 private:
-    std::deque<T> datos_;
+    struct Nodo {
+        T valor;
+        Nodo* siguiente;
+    };
+
+    void enlazarNuevo(Nodo* nodo) {
+        if (!fondo_) {
+            frente_ = nodo;
+        } else {
+            fondo_->siguiente = nodo;
+        }
+        fondo_ = nodo;
+        ++tam_;
+    }
+
+    void copiarDesde(const Cola& other) {
+        const Nodo* cursor = other.frente_;
+        while (cursor) {
+            enqueue(cursor->valor);
+            cursor = cursor->siguiente;
+        }
+    }
+
+    Nodo* frente_;
+    Nodo* fondo_;
+    std::size_t tam_;
 };
 
-} // namespace edd
+}
+#endif //COLA_H

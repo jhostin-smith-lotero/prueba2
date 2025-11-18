@@ -1,0 +1,25 @@
+# ninja log v6
+443	1019	7842283328711782	CMakeFiles/monoterminal.dir/src/juego/Turnos.cpp.obj	e8f507a01e59392a
+181	2384	7842283326083608	CMakeFiles/monoterminal.dir/src/juego/Banco.cpp.obj	b2c8fed2475612cc
+493	2450	7842283329203341	CMakeFiles/monoterminal.dir/src/modelo/Carta.cpp.obj	6d248a042cbff013
+547	2613	7842283329756285	CMakeFiles/monoterminal.dir/src/modelo/Ferrocarril.cpp.obj	4c24fd67c89e2a63
+1022	3203	7842283334507609	CMakeFiles/monoterminal.dir/src/modelo/Servicio.cpp.obj	3fc0eb00c858c749
+582	3229	7842283330105092	CMakeFiles/monoterminal.dir/src/modelo/Jugador.cpp.obj	c0bbd90b3327410e
+291	3278	7842283327183263	CMakeFiles/monoterminal.dir/src/juego/Dado.cpp.obj	67fa0a65452ff6eb
+165	3333	7842283325930285	CMakeFiles/monoterminal.dir/src/edd/TablaHash.cpp.obj	8f4bf7d49cd80b7c
+617	4001	7842283330452330	CMakeFiles/monoterminal.dir/src/modelo/Mazo.cpp.obj	d10ec6f89e2f5a8f
+2387	4290	7842283348145986	CMakeFiles/monoterminal.dir/src/modelo/Solar.cpp.obj	20080f944b8b96d
+2614	4384	7842283350420190	CMakeFiles/monoterminal.dir/src/reglas/CalculoRenta.cpp.obj	58030eba138aeb0b
+516	4534	7842283329439425	CMakeFiles/monoterminal.dir/src/modelo/Especial.cpp.obj	1e2c2040f90d89d7
+649	4549	7842283330764695	CMakeFiles/monoterminal.dir/src/modelo/Propiedad.cpp.obj	aa6c62f7aa12d4e8
+143	4679	7842283325714272	CMakeFiles/monoterminal.dir/src/cli/Consola.cpp.obj	90d4bc82cd74c8e1
+2450	4769	7842283348784710	CMakeFiles/monoterminal.dir/src/modelo/Tablero.cpp.obj	5e1e22a5437234b3
+3230	4800	7842283356578129	CMakeFiles/monoterminal.dir/src/reglas/Hipoteca.cpp.obj	71572fe0b02f95a7
+3204	4808	7842283356318084	CMakeFiles/monoterminal.dir/src/reglas/Construccion.cpp.obj	799d8d52284c6144
+466	4937	7842283328947096	CMakeFiles/monoterminal.dir/src/main.cpp.obj	667495e12cef3b6
+24	5223	7842283324525776	CMakeFiles/monoterminal.dir/src/cli/Comandos.cpp.obj	69f12bccc8391be1
+3279	5420	7842283357076136	CMakeFiles/monoterminal.dir/src/reglas/Reglas.cpp.obj	6d391514b52c18e7
+4002	6782	7842283364292927	CMakeFiles/monoterminal.dir/src/util/StringUtils.cpp.obj	22be0f3a31d3cd7a
+3334	6960	7842283357619790	CMakeFiles/monoterminal.dir/src/util/Json.cpp.obj	72039208e3d3f176
+419	7271	7842283328465596	CMakeFiles/monoterminal.dir/src/juego/Juego.cpp.obj	21273a215ded9212
+7271	9673	7842283396989911	monoterminal.exe	c9b552913bf78004

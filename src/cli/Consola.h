@@ -1,27 +1,51 @@
-#pragma once
+#ifndef CONSOLA_H
+#define CONSOLA_H
 
+#include "Comandos.h"
 #include <string>
-#include <vector>
 
-namespace juego {
-class Juego;
-}
+/**
+ * @file Consola.h
+ * @brief Interfaz de línea de comandos que utiliza la clase Comandos.
+ *
+ * Interactúa con la clase Juego por medio de callbacks registrados.
+ */
 
-namespace cli {
+class Juego; // forward
 
+/**
+ * @class Consola
+ * @brief Bucle principal de entrada/salida (CLI).
+ */
 class Consola {
 public:
-    void mostrarBienvenida() const;
-    void mostrarEstado(const juego::Juego& juego) const;
-    void mostrarMensaje(const std::string& mensaje) const;
+    /**
+     * @brief Constructor.
+     * @pre Ninguna.
+     * @post Consola creada sin callbacks registrados.
+     */
+    Consola();
 
-    int mostrarMenu(const std::string& titulo, const std::vector<std::string>& opciones) const;
-    int solicitarEntero(const std::string& prompt, int minimo, int maximo) const;
-    std::vector<std::string> solicitarNombresJugadores() const;
-    std::string leerLinea(const std::string& prompt) const;
+    /**
+     * @brief Inicializa la consola y registra comandos básicos interactuando con el juego.
+     * @param juego Puntero al objeto Juego (no nulo).
+     * @pre juego debe estar inicializado.
+     * @post Se registran comandos básicos que llaman a métodos de 'juego'.
+     */
+    void inicializar(Juego* juego);
+
+    /**
+     * @brief Ejecuta el bucle interactivo hasta recibir el comando 'salir'.
+     * @pre inicializar() debió haberse llamado previamente.
+     * @post El programa sale cuando el usuario escribe 'salir' o similar.
+     */
+    void run();
 
 private:
-    int leerEntero() const;
+    Comandos comandos;
+    bool activo;
+
+    void registrarComandosBase(Juego* juego);
 };
 
-} // namespace cli
+#endif // CONSOLA_H

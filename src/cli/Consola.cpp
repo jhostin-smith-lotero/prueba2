@@ -1,84 +1,96 @@
 #include "Consola.h"
-
-#include "../juego/Juego.h"
-#include "../modelo/Jugador.h"
-
 #include <iostream>
-#include <limits>
-#include <sstream>
+#include <algorithm>
+#include <functional>
+#include "../juego/Juego.h" // ajustar ruta según el proyecto
 
-namespace cli {
+Consola::Consola() : activo(false) {}
 
-void Consola::mostrarBienvenida() const {
-    std::cout << "Bienvenido a Mono'Terminal" << std::endl;
-    std::cout << "Utiliza las opciones numeradas para jugar." << std::endl;
+void Consola::inicializar(Juego* juego) {
+    if (!juego) return;
+    registrarComandosBase(juego);
+    activo = true;
 }
 
-void Consola::mostrarEstado(const juego::Juego& juego) const {
-    std::cout << juego.resumenEstado();
-}
+void Consola::registrarComandosBase(Juego* juego) {
+    // Comando: iniciar (ya se asume que juego->inicializarJugadores existe)
+    comandos.registrar("iniciar", [juego](const std::string& args){
+        juego->inicializarJugadores();
+    });
 
-void Consola::mostrarMensaje(const std::string& mensaje) const {
-    std::cout << mensaje << std::endl;
-}
+    // Comando: turno -> juega un turno
+    comandos.registrar("turno", [juego](const std::string& args){
+        juego->jugarTurno();
+    });
 
-int Consola::mostrarMenu(const std::string& titulo, const std::vector<std::string>& opciones) const {
-    if (!titulo.empty()) {
-        std::cout << titulo << std::endl;
-    }
-    for (std::size_t i = 0; i < opciones.size(); ++i) {
-        std::cout << (i + 1) << ". " << opciones[i] << std::endl;
-    }
-    while (true) {
-        std::cout << "> Selecciona una opción: ";
-        int seleccion = leerEntero();
-        if (seleccion >= 1 && seleccion <= static_cast<int>(opciones.size())) {
-            return seleccion - 1;
+    // Comando: estado -> muestra estado
+    comandos.registrar("estado", [juego](const std::string& args){
+        juego->mostrarEstado();
+    });
+
+    // Comando: jugar (loop hasta terminar una partida completa)
+    comandos.registrar("jugar", [juego](const std::string& args){
+        while (!juego->haTerminado()) {
+            juego->jugarTurno();
         }
-        std::cout << "Opción inválida. Inténtalo nuevamente." << std::endl;
-    }
-}
+        std::cout << "Juego finalizado.\n";
+    });
 
-int Consola::solicitarEntero(const std::string& prompt, int minimo, int maximo) const {
-    while (true) {
-        std::cout << prompt;
-        int valor = leerEntero();
-        if (valor >= minimo && valor <= maximo) {
-            return valor;
+    // Comando: ayuda
+    comandos.registrar("ayuda", [this](const std::string& args){
+        std::cout << "Comandos disponibles:\n";
+        for (const auto& p : comandos.listar()) {
+            std::cout << " - " << p.first << "\n";
         }
-        std::cout << "Valor fuera de rango. Debe estar entre " << minimo << " y " << maximo << "." << std::endl;
-    }
+    });
+
+    // Comando: salir
+    comandos.registrar("salir", [this](const std::string& args){
+        std::cout << "Saliendo...\n";
+        this->activo = false;
+    });
+
+    // Comando: construir <propiedad>
+    comandos.registrar("construir", [juego](const std::string& args){
+        // args => nombre de la propiedad
+        // supondremos que existe un manejador en Juego para construir
+        // ADAPTAR: juego->construir(args);
+        // Si no existe, se puede invocar reglas/Construccion desde aquí.
+        std::cout << "Solicitado construir en: " << args << "\n";
+        // Intentamos método en Juego (si existe)
+        // ADAPTAR: si no lo tienes, conecta con Construccion.cpp
+        // ejemplo:
+        // juego->construir(args);
+    });
+
+    // Comando: hipotecar <propiedad>
+    comandos.registrar("hipotecar", [juego](const std::string& args){
+        std::cout << "Solicitado hipotecar: " << args << "\n";
+        // ADAPTAR: juego->hipotecar(args);
+    });
+
+    // Comando: comprar <propiedad>
+    comandos.registrar("comprar", [juego](const std::string& args){
+        std::cout << "Solicitado comprar: " << args << "\n";
+        // ADAPTAR: juego->comprarPropiedad(args);
+    });
 }
 
-std::vector<std::string> Consola::solicitarNombresJugadores() const {
-    std::cout << "Introduce los nombres de los jugadores separados por espacios: ";
+void Consola::run() {
+    if (!activo) {
+        std::cerr << "Consola no inicializada. Llama a inicializar(juego) antes.\n";
+        return;
+    }
     std::string linea;
-    std::getline(std::cin, linea);
-    std::istringstream iss(linea);
-    std::vector<std::string> nombres;
-    std::string nombre;
-    while (iss >> nombre) {
-        nombres.push_back(nombre);
+    std::cout << "Bienvenido al Monopoly CLI. Escribe 'ayuda' para ver comandos.\n";
+    while (activo) {
+        std::cout << "> ";
+        if (!std::getline(std::cin, linea)) break;
+        // trim
+        linea.erase(linea.find_last_not_of(" \n\r\t")+1);
+        if (linea.empty()) continue;
+        if (!comandos.ejecutar(linea)) {
+            std::cout << "Comando no reconocido. Escribe 'ayuda'.\n";
+        }
     }
-    return nombres;
 }
-
-std::string Consola::leerLinea(const std::string& prompt) const {
-    std::cout << prompt;
-    std::string linea;
-    std::getline(std::cin, linea);
-    return linea;
-}
-
-int Consola::leerEntero() const {
-    int valor = 0;
-    while (!(std::cin >> valor)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Entrada inválida. Inténtalo nuevamente: ";
-    }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    return valor;
-}
-
-} // namespace cli

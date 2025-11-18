@@ -1,0 +1,10 @@
+[
+  { "tipo": "cobrar", "monto": 200, "descripcion": "Cobras $200 por error del banco a tu favor." },
+  { "tipo": "pagar", "monto": 50, "descripcion": "Paga $50 por gastos médicos." },
+  { "tipo": "pagar", "monto": 100, "descripcion": "Paga $100 por servicios escolares." },
+  { "tipo": "cobrar", "monto": 25, "descripcion": "Cobras $25 por vender tus muebles antiguos." },
+  { "tipo": "salir_carcel", "descripcion": "Quedas libre de la cárcel. Guarda esta carta hasta usarla." },
+  { "tipo": "ir_carcel", "descripcion": "Vas directamente a la cárcel." },
+  { "tipo": "cobrar", "monto": 100, "descripcion": "Cobras $100 por intereses de bonos." },
+  { "tipo": "cobrar", "monto": 10, "descripcion": "Recibes $10 por tus servicios comunitarios." }
+]

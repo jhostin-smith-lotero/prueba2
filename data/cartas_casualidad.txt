@@ -1,0 +1,10 @@
+[
+  { "tipo": "mover_a", "destino": 0, "descripcion": "Avanza hasta SALIDA y cobra $200." },
+  { "tipo": "mover_a", "destino": 24, "descripcion": "Ve a la AVENIDA ILLINOIS." },
+  { "tipo": "mover_a", "destino": 11, "descripcion": "Ve a la PLAZA ST. CHARLES." },
+  { "tipo": "pagar", "monto": 50, "descripcion": "Paga multa de $50." },
+  { "tipo": "cobrar", "monto": 150, "descripcion": "Recibes $150 por la venta de tus acciones." },
+  { "tipo": "salir_carcel", "descripcion": "Quedas libre de la cárcel. Guarda esta carta hasta usarla." },
+  { "tipo": "ir_carcel", "descripcion": "Ve directamente a la cárcel. No cobras al pasar GO." },
+  { "tipo": "reparar", "porCasa": 25, "porHotel": 100, "descripcion": "Paga $25 por cada casa y $100 por cada hotel que poseas." }
+]
