@@ -34,6 +34,7 @@ namespace modelo {
 
         void agregarPropiedad(Propiedad* propiedad);
         void quitarPropiedad(Propiedad* propiedad);
+        void limpiarPropiedades();
 
     private:
         std::string nombre_;

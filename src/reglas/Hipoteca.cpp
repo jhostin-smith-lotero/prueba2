@@ -1,45 +1,30 @@
 #include "Hipoteca.h"
 #include <iostream>
-#include "../modelo/Propiedad.h"
-#include "../modelo/Jugador.h"
 
-/*
- SUPOSICIONES:
-  - Propiedad:
-    - bool isHipotecada() const;
-    - void setHipotecada(bool);
-    - int getPrecio() const;
-    - std::string getPropietarioName() const;
-  - Jugador:
-    - void recibir(int monto);
-    - bool pagar(int monto);
-    - std::string getNombre() const;
-*/
-
-bool Hipoteca::hipotecar(Propiedad* propiedad, Jugador* jugador) {
+bool Hipoteca::hipotecar(modelo::Propiedad* propiedad, modelo::Jugador* jugador) {
     if (!propiedad || !jugador) return false;
-    if (propiedad->isHipotecada()) return false;
-    if (propiedad->getPropietarioName() != jugador->getNombre()) return false;
+    if (propiedad->estaHipotecada()) return false;
+    if (propiedad->dueno() != jugador) return false;
 
-    int monto = propiedad->getPrecio() / 2; // ejemplo: 50% del precio
-    jugador->recibir(monto);
-    propiedad->setHipotecada(true);
-    std::cout << jugador->getNombre() << " hipotecó " << propiedad->getNombre() << " por $" << monto << ".\n";
+    int monto = propiedad->datos().precio() / 2;
+    jugador->cobrar(monto);
+    propiedad->hipotecar();
+    std::cout << jugador->nombre() << " hipotecó " << propiedad->nombre() << " por $" << monto << "\n";
     return true;
 }
 
-bool Hipoteca::cancelarHipoteca(Propiedad* propiedad, Jugador* jugador) {
+bool Hipoteca::cancelarHipoteca(modelo::Propiedad* propiedad, modelo::Jugador* jugador) {
     if (!propiedad || !jugador) return false;
-    if (!propiedad->isHipotecada()) return false;
-    if (propiedad->getPropietarioName() != jugador->getNombre()) return false;
+    if (!propiedad->estaHipotecada()) return false;
+    if (propiedad->dueno() != jugador) return false;
 
-    // interes ejemplo 10%
-    int deuda = (propiedad->getPrecio() / 2);
+    int deuda = propiedad->datos().precio() / 2;
     int interes = deuda / 10;
     int total = deuda + interes;
-
-    if (!jugador->pagar(total)) return false;
-    propiedad->setHipotecada(false);
-    std::cout << jugador->getNombre() << " canceló la hipoteca de " << propiedad->getNombre() << " pagando $" << total << ".\n";
+    if (!jugador->pagar(total)) {
+        return false;
+    }
+    propiedad->deshipotecar();
+    std::cout << jugador->nombre() << " canceló hipoteca pagando $" << total << "\n";
     return true;
 }
