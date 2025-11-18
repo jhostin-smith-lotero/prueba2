@@ -10,14 +10,16 @@ struct Especial : public Casilla {
 public:
     enum TipoEspecial { GO, CARCEL, IR_CARCEL, IMPUESTO, CASUALIDAD, ARCA, PARQUE };
 
-    Especial(const std::string& nombre, TipoEspecial tipo);
+    Especial(const std::string& nombre, TipoEspecial tipo, int monto = 0);
 
     TipoEspecial tipoEspecial() const { return tipoEspecial_; }
+    int montoImpuesto() const { return monto_; }
 
     void alCaer(Juego& juego, Jugador& jugador, int tirada) override;
 
 private:
     TipoEspecial tipoEspecial_;
+    int monto_;
 };
 
 }

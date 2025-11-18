@@ -4,20 +4,40 @@
 #include "Banco.h"
 #include "Estado.h"
 #include "../modelo/Jugador.h"
+#include "../modelo/Casilla.h"
+#include "../modelo/Especial.h"
 
 /**
  * @class Reglas
- * @brief Procesa el efecto de caer en una casilla del tablero.
+ * @brief Procesa reglas generales y parámetros configurables del juego.
  */
 class Reglas {
 public:
+    Reglas();
+
     /**
-     * @brief Evalúa la casilla actual del jugador.
-     * @pre jugador.posicion debe estar en el rango [0,39].
-     * @pre banco y estado deben estar correctamente inicializados.
-     * @post El jugador puede recibir dinero, perder dinero, ir a la cárcel o no ocurrir nada.
+     * @brief Carga configuración desde un archivo de texto simple.
+     * @param ruta Ruta del archivo.
      */
-    void evaluarCasilla(modelo::Jugador& jugador, Banco& banco, Estado& estado);
+    void cargarConfig(const std::string& ruta);
+
+    /**
+     * @brief Evalúa el efecto de una casilla especial.
+     */
+    void evaluarCasilla(modelo::Especial* especial, modelo::Jugador& jugador, Banco& banco, int posicionCarcel) const;
+
+    int salarioGo() const { return salarioGO; }
+    int multaCarcel() const { return multaCarcelConfig; }
+    int stockCasasInicial() const { return stockCasas; }
+    int stockHotelesInicial() const { return stockHoteles; }
+    int interesHipoteca() const { return interesHipotecaPorc; }
+
+private:
+    int salarioGO;
+    int multaCarcelConfig;
+    int stockCasas;
+    int stockHoteles;
+    int interesHipotecaPorc;
 };
 
 #endif

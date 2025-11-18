@@ -59,6 +59,10 @@ void Consola::run() {
     juegoActual->inicializarJugadores();
     std::cout << "Bienvenido al Monopoly en consola.\n";
     while (activo && !juegoActual->haTerminado()) {
+        modelo::Jugador& j = juegoActual->jugadorActual();
+        std::cout << "Turno: " << j.nombre() << " | Dinero $" << juegoActual->bancoJugador().getSaldo(j.nombre())
+                  << " | Posicion " << j.posicion() << "\n";
+        juegoActual->tableroJuego().describirCasilla(j.posicion());
         construirOpciones(*juegoActual);
         mostrarOpciones();
         std::cout << "Selecciona una opción (0 para salir): ";

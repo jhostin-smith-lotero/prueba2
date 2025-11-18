@@ -39,3 +39,4 @@ std::string Estado::getPropietario(const std::string& propiedad) {
         return propiedades[propiedad];
     return "";
 }
+

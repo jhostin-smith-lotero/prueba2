@@ -9,22 +9,19 @@
 #include "../modelo/Tablero.h"
 #include "../edd/Pila.h"
 #include "../edd/TablaHash.h"
+#include "../reglas/Construccion.h"
+#include "../reglas/Hipoteca.h"
 
-/**
- * @class Juego
- * @brief Controla la lógica principal del juego Monopoly.
- */
 class Juego {
 private:
     Banco banco;
     Dado dado1, dado2;
     Estado estado;
-    Reglas reglas;
+    Reglas reglamento;
     Turnos turnos;
     modelo::Tablero tablero;
     edd::TablaHash indice;
     bool partidaIniciada;
-    bool dadosLanzados;
     bool opcionCompra;
     int ultimoDado1;
     int ultimoDado2;
@@ -40,34 +37,19 @@ private:
         Estado estado;
         Turnos turnos;
         FaseTurno fase;
-        bool dadosLanzados;
         bool opcionCompra;
         int ultimoDado1;
         int ultimoDado2;
+        std::vector<modelo::Tablero::EstadoPropiedad> propiedades;
     };
 
     edd::Pila<Snapshot> historial;
 
 public:
-    /**
-     * @brief Constructor del juego.
-     * @pre Ninguna.
-     * @post Juego inicializado con todas las estructuras listas.
-     */
     Juego();
 
-    /**
-     * @brief Inicializa los jugadores ingresados por el usuario.
-     * @pre El usuario debe ingresar entre 2 y 4 nombres válidos.
-     * @post Se crean cuentas y jugadores dentro del estado.
-     */
     void inicializarJugadores();
 
-    /**
-     * @brief Ejecuta un turno del juego.
-     * @pre Deben existir jugadores inicializados.
-     * @post El jugador actual lanza dados, se mueve y se evalúa la casilla.
-     */
     void lanzarDados();
     void comprarPropiedadActual();
     void intentarConstruir();
@@ -77,20 +59,8 @@ public:
     void pagarMultaCarcel();
     void pasar();
     void undo();
-
-    /**
-     * @brief Muestra el estado general del juego.
-     * @pre Jugadores inicializados.
-     * @post No modifica estado.
-     */
     void mostrarEstado() const;
 
-    /**
-     * @brief Determina si el juego ya terminó.
-     * @pre Jugadores inicializados.
-     * @post No modifica estado.
-     * @return true si solo queda un jugador con saldo > 0.
-     */
     bool haTerminado() const;
 
     bool puedeComprar() const;
@@ -106,12 +76,22 @@ public:
     FaseTurno faseActual() const { return fase; }
     modelo::Jugador& jugadorActual();
 
+    const Reglas& reglas() const { return reglamento; }
+    Reglas& reglas() { return reglamento; }
+    Banco& bancoJugador() { return banco; }
+    modelo::Tablero& tableroJuego() { return tablero; }
+    int posicionCarcel() const { return tablero.posicionCarcel(); }
+
 private:
     void avanzarJugador(modelo::Jugador& jugador, int pasos);
     void prepararNuevoTurno();
     void evaluarPropiedad(modelo::Propiedad* propiedad, modelo::Jugador& jugador, int tirada);
     void guardarEstado();
     void restaurarEstado();
+    bool grupoCompleto(const std::string& color, const modelo::Jugador& jugador) const;
+    int valorEdificacion(const modelo::Solar* solar) const;
+    bool cumpleSimetria(const modelo::Solar* solar, const modelo::Jugador& jugador) const;
+    std::vector<modelo::Solar*> solaresConstruibles(const modelo::Jugador& jugador) const;
 };
 
 #endif

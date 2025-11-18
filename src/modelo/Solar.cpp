@@ -19,6 +19,11 @@ void Solar::construirHotel() {
     }
 }
 
+void Solar::fijarEdificaciones(int casas, bool hotel) {
+    casas_ = casas;
+    hotel_ = hotel;
+}
+
 int Solar::rentaBase(int tirada) const {
     (void)tirada;
     if (hotel_) {

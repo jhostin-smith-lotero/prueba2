@@ -17,65 +17,19 @@ private:
     std::unordered_map<std::string, std::string> propiedades;
 
 public:
-    /**
-     * @brief Constructor.
-     * @pre Ninguna.
-     * @post Estado inicializado sin jugadores y turnoActual = 0.
-     */
     Estado();
 
-    /**
-     * @brief Agrega un jugador al estado del juego.
-     * @pre nombre no debe estar vacío.
-     * @post Se añade un jugador con posición 0 y enCarcel=false.
-     */
     void agregarJugador(const std::string& nombre);
-
-    /**
-     * @brief Obtiene el jugador del turno actual.
-     * @pre Debe existir al menos un jugador agregado.
-     * @post No modifica estado.
-     */
     modelo::Jugador& getJugadorActual();
-
-    /**
-     * @brief Obtiene el jugador del turno actual (versión const).
-     */
     const modelo::Jugador& getJugadorActualConst() const;
-
-    /**
-     * @brief Avanza al siguiente turno.
-     * @pre Debe haber al menos un jugador registrado.
-     * @post turnoActual incrementa circularmente.
-     */
     void siguienteTurno();
-
-    /**
-     * @brief Obtiene el número del turno actual.
-     * @pre Ninguna.
-     * @post No modifica estado.
-     */
     int getTurnoActual() const;
-
-    /**
-     * @brief Retorna la lista completa de jugadores.
-     * @pre Ninguna.
-     * @post No modifica estado.
-     */
     std::vector<modelo::Jugador> getJugadores() const;
 
-    /**
-     * @brief Asigna una propiedad a un jugador.
-     * @pre propiedad no debe ser vacía; jugador debe existir.
-     * @post Se actualiza el dueño de la propiedad en el mapa.
-     */
-    void asignarPropiedad(const std::string& propiedad, const std::string& jugador);
+    const std::vector<modelo::Jugador>& jugadoresRef() const { return jugadores; }
+    std::vector<modelo::Jugador>& jugadoresRefMutable() { return jugadores; }
 
-    /**
-     * @brief Obtiene el propietario de una propiedad.
-     * @pre propiedad debe existir en el mapa o haber sido registrada.
-     * @post No modifica estado.
-     */
+    void asignarPropiedad(const std::string& propiedad, const std::string& jugador);
     std::string getPropietario(const std::string& propiedad);
 };
 

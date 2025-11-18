@@ -15,6 +15,7 @@ public:
 
     void construirCasa();
     void construirHotel();
+    void fijarEdificaciones(int casas, bool hotel);
 
     int rentaBase(int tirada) const override;
     void alCaer(Juego& juego, Jugador& jugador, int tirada) override;
