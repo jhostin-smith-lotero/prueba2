@@ -9,7 +9,7 @@ bool Hipoteca::hipotecar(modelo::Propiedad* propiedad, modelo::Jugador* jugador)
     int monto = propiedad->datos().precio() / 2;
     jugador->cobrar(monto);
     propiedad->hipotecar();
-    std::cout << jugador->nombre() << " hipotecó " << propiedad->nombre() << " por $" << monto << "\n";
+    std::cout << jugador->nombre() << " hipoteco " << propiedad->nombre() << " por $" << monto << "\n";
     return true;
 }
 
@@ -25,6 +25,6 @@ bool Hipoteca::cancelarHipoteca(modelo::Propiedad* propiedad, modelo::Jugador* j
         return false;
     }
     propiedad->deshipotecar();
-    std::cout << jugador->nombre() << " canceló hipoteca pagando $" << total << "\n";
+    std::cout << jugador->nombre() << " cancelo hipoteca pagando $" << total << "\n";
     return true;
 }

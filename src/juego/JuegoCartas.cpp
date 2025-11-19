@@ -17,10 +17,10 @@ void Juego::resolverEspecial(modelo::Especial* especial, modelo::Jugador& jugado
             std::cout << "No tienes saldo para pagar impuesto de $" << monto << "\n";
         }
     } else if (tipo == modelo::Especial::IR_CARCEL) {
-        std::cout << "Vas directo a la cárcel.\n";
+        std::cout << "Vas directo a la carcel.\n";
         jugador.encarcelar(posicionCarcel());
     } else if (tipo == modelo::Especial::CARCEL) {
-        std::cout << "Estás de visita en la cárcel.\n";
+        std::cout << "Estas de visita en la carcel.\n";
     } else if (tipo == modelo::Especial::PARQUE) {
         std::cout << "Parqueo libre, nada ocurre.\n";
     } else if (tipo == modelo::Especial::CASUALIDAD || tipo == modelo::Especial::ARCA) {
@@ -32,7 +32,7 @@ void Juego::resolverEspecial(modelo::Especial* especial, modelo::Jugador& jugado
             tomada = mazoArca.robar(carta);
         }
         if (!tomada) {
-            std::cout << "El mazo está vacío.\n";
+            std::cout << "El mazo está vacio.\n";
             return;
         }
         std::cout << "Carta: " << carta.texto() << "\n";
@@ -94,7 +94,7 @@ void Juego::aplicarCarta(const modelo::Carta& carta, modelo::Jugador& jugador) {
 void Juego::cargarMazo(const std::string& ruta, modelo::Mazo& mazo, bool esArca) {
     FILE* f = std::fopen(ruta.c_str(), "r");
     if (!f) {
-        std::cout << "No se pudo abrir " << ruta << ", se usarán cartas básicas.\n";
+        std::cout << "No se pudo abrir " << ruta << ", se usaran cartas básicas.\n";
         if (esArca) {
             mazo.agregar(modelo::Carta("Cobra $50", modelo::Carta::Accion::COBRAR, 50));
         } else {

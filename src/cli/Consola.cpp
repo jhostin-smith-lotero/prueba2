@@ -20,7 +20,7 @@ void Consola::construirOpciones(Juego& juego) {
             comandos.agregar({numero++, Comandos::PagarMulta, "Pagar multa y salir"});
         }
         if (juego.tieneCartaSalir()) {
-            comandos.agregar({numero++, Comandos::UsarCarta, "Usar carta 'Salir de la cárcel'"});
+            comandos.agregar({numero++, Comandos::UsarCarta, "Usar carta 'Salir de la carcel'"});
         }
     } else {
         if (juego.puedeComprar()) {
@@ -65,7 +65,7 @@ void Consola::run() {
         juegoActual->tableroJuego().describirCasilla(j.posicion());
         construirOpciones(*juegoActual);
         mostrarOpciones();
-        std::cout << "Selecciona una opción (0 para salir): ";
+        std::cout << "Selecciona una opcion (0 para salir): ";
         int opcion = 0;
         std::cin >> opcion;
         if (!std::cin) break;
@@ -74,7 +74,7 @@ void Consola::run() {
             break;
         }
         if (!comandos.ejecutar(opcion, *juegoActual)) {
-            std::cout << "Opción inválida.\n";
+            std::cout << "Opcion inválida.\n";
         }
     }
     std::cout << "Juego terminado.\n";

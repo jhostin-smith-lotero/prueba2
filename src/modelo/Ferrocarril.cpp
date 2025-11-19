@@ -26,7 +26,7 @@ int Ferrocarril::rentaBase(int tirada) const {
 void Ferrocarril::alCaer(Juego& juego, Jugador& jugador, int tirada) {
     (void)juego;
     (void)tirada;
-    std::cout << "Línea ferroviaria: " << nombre() << "\n";
+    std::cout << "Linea ferroviaria: " << nombre() << "\n";
 }
 
 }

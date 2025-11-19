@@ -8,39 +8,58 @@
 
 /**
  * @file Construccion.h
- * @brief Funciones para construir casas/hoteles en propiedades del tipo Solar.
+ * @brief Permite construir casas y hoteles en propiedades tipo Solar.
  *
- * Dependencias: Solar en modelo.
- */
-
-class Propiedad;
-class Jugador;
-
-/**
- * @class Construccion
- * @brief Maneja la lógica de construcción de casas y hoteles.
+ * Reglas aplicadas:
+ * - Solo solares pueden tener edificaciones.
+ * - Debe ser dueño del solar.
+ * - No se puede construir si la propiedad está hipotecada.
+ * - Para hotel se requieren 4 casas previas.
  */
 class Construccion {
 public:
+
     /**
-     * @brief Construye una casa en la propiedad indicada (si es posible).
-     * @param propiedad Puntero a la propiedad tipo Solar.
-     * @param jugador Propietario que desea construir.
-     * @pre propiedad y jugador no deben ser null.
-     * @pre propiedad debe ser del tipo solar y pertenecer al jugador.
-     * @pre propiedad no debe estar hipotecada.
-     * @post Si es posible, se incrementa el número de casas y se descuenta el dinero al jugador.
-     * @return true si la construcción fue exitosa, false en caso contrario.
+     * @brief Construye una casa en un solar.
+     *
+     * @param propiedad Debe ser un Solar.
+     * @param jugador Dueño del solar.
+     *
+     * @pre propiedad != nullptr.
+     * @pre jugador != nullptr.
+     * @pre propiedad es de tipo Solar (dynamic_cast válido).
+     * @pre propiedad->dueno() == jugador.
+     * @pre propiedad no está hipotecada.
+     * @pre solar->casas() < 4.
+     * @pre jugador tiene fondos suficientes para pagar costoCasa.
+     *
+     * @post solar->casas() incrementa en 1.
+     * @post jugador->dinero() disminuye en escritura.costoCasa().
+     *
+     * @return true si la casa fue construida.
      */
     bool construirCasa(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 
     /**
-     * @brief Construye un hotel (requerirá 4 casas previas).
-     * @param propiedad Puntero a la propiedad tipo Solar.
-     * @param jugador Propietario que desea construir.
-     * @pre misma que construirCasa además de tener 4 casas.
-     * @post Si es posible, se establecen 0 casas y 1 hotel (según implementación) y se descuenta monto.
-     * @return true si se construye el hotel; false en caso contrario.
+     * @brief Construye un hotel en un solar.
+     *
+     * @param propiedad Debe ser un Solar.
+     * @param jugador Dueño del solar.
+     *
+     * @pre propiedad != nullptr.
+     * @pre jugador != nullptr.
+     * @pre propiedad es Solar (dynamic_cast).
+     * @pre propiedad->dueno() == jugador.
+     * @pre solar->casas() == 4.
+     * @pre solar->hotel() == false.
+     * @pre propiedad no está hipotecada.
+     * @pre jugador tiene suficiente dinero para pagar costoHotel.
+     *
+     * @post solar->casas() = 0.
+     * @post solar->hotel() = true.
+     * @post jugador->dinero() disminuye en costoHotel.
+     *
+     * @return true si el hotel fue construido.
      */
     bool construirHotel(modelo::Propiedad* propiedad, modelo::Jugador* jugador);
 };

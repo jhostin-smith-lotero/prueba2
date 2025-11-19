@@ -62,7 +62,7 @@ void Tablero::crearCasillas() {
         f = std::fopen("../data/tablero.txt", "r");
     }
     if (!f) {
-        std::cout << "No se pudo cargar data/tablero.txt, tablero vacío.\n";
+        std::cout << "No se pudo cargar data/tablero.txt, tablero vacio.\n";
         return;
     }
     char buffer[512];
@@ -247,7 +247,7 @@ void Tablero::restaurarEstado(const std::vector<EstadoPropiedad>& estado, std::v
 void Tablero::describirCasilla(int indice) const {
     Casilla* c = obtener(indice);
     if (!c) return;
-    std::cout << "Posición " << indice << ": " << c->nombre();
+    std::cout << "Posicion " << indice << ": " << c->nombre();
     if (c->tipo() == Casilla::Tipo::SOLAR) {
         Solar* s = (Solar*)c;
         std::cout << " | Solar color " << s->color() << " precio $" << s->datos().precio();

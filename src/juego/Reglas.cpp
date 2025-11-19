@@ -61,10 +61,10 @@ void Reglas::evaluarCasilla(modelo::Especial* especial, modelo::Jugador& jugador
             std::cout << "No tienes saldo para pagar impuesto de $" << monto << "\n";
         }
     } else if (tipo == modelo::Especial::IR_CARCEL) {
-        std::cout << "Vas directo a la cárcel.\n";
+        std::cout << "Vas directo a la carcel.\n";
         jugador.encarcelar(posicionCarcel);
     } else if (tipo == modelo::Especial::CARCEL) {
-        std::cout << "Estás de visita en la cárcel.\n";
+        std::cout << "Estas de visita en la carcel.\n";
     } else if (tipo == modelo::Especial::PARQUE) {
         std::cout << "Parqueo libre, nada ocurre.\n";
     } else if (tipo == modelo::Especial::CASUALIDAD || tipo == modelo::Especial::ARCA) {

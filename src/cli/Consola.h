@@ -6,38 +6,36 @@
 
 /**
  * @file Consola.h
- * @brief Interfaz de línea de comandos que utiliza la clase Comandos.
- *
- * Interactúa con la clase Juego por medio de callbacks registrados.
+ * @brief Interfaz de texto (CLI) que usa la clase Comandos para ejecutar acciones del juego.
  */
 
-class Juego; // forward
+class Juego;
 
 /**
  * @class Consola
- * @brief Bucle principal de entrada/salida (CLI).
+ * @brief Se encarga de recibir entrada del usuario y ejecutar comandos.
  */
 class Consola {
 public:
     /**
      * @brief Constructor.
      * @pre Ninguna.
-     * @post Consola creada sin callbacks registrados.
+     * @post Crea una consola inactiva y sin juego asociado.
      */
     Consola();
 
     /**
-     * @brief Inicializa la consola y registra comandos básicos interactuando con el juego.
-     * @param juego Puntero al objeto Juego (no nulo).
-     * @pre juego debe estar inicializado.
-     * @post Se registran comandos básicos que llaman a métodos de 'juego'.
+     * @brief Inicializa la consola y prepara la lista de comandos.
+     * @param juego Puntero al juego.
+     * @pre juego != nullptr.
+     * @post El menú queda configurado y la consola lista para ejecutarse.
      */
     void inicializar(Juego* juego);
 
     /**
-     * @brief Ejecuta el bucle interactivo hasta recibir el comando 'salir'.
-     * @pre inicializar() debió haberse llamado previamente.
-     * @post El programa sale cuando el usuario escribe 'salir' o similar.
+     * @brief Ejecuta el bucle principal de interacción por texto.
+     * @pre inicializar() ya fue llamado.
+     * @post El bucle termina únicamente cuando el usuario ingresa el comando "salir".
      */
     void run();
 
@@ -46,7 +44,18 @@ private:
     bool activo;
     Juego* juegoActual;
 
+    /**
+     * @brief Construye el menú dinámico según el estado actual del juego.
+     * @pre juego debe estar inicializado.
+     * @post La lista de comandos queda actualizada.
+     */
     void construirOpciones(Juego& juego);
+
+    /**
+     * @brief Muestra las opciones del menú en pantalla.
+     * @pre Ninguna.
+     * @post No modifica estado del juego ni la consola.
+     */
     void mostrarOpciones();
 };
 

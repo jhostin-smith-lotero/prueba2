@@ -53,10 +53,10 @@ void Juego::lanzarDados() {
     if (actual.enCarcel()) {
         if (ultimoDado1 == ultimoDado2) {
             actual.liberarDeCarcel();
-            std::cout << "Dobles! sales de la cárcel.\n";
+            std::cout << "Dobles! sales de la carcel.\n";
         } else {
             actual.incrementarTurnoCarcel();
-            std::cout << "Sigues en la cárcel.\n";
+            std::cout << "Sigues en la carcel.\n";
             fase = PostTirada;
             return;
         }
@@ -105,10 +105,10 @@ void Juego::intentarConstruir() {
     modelo::Jugador& jugador = estado.getJugadorActual();
     std::vector<modelo::Solar*> opciones = solaresConstruibles(jugador);
     if (opciones.empty()) {
-        std::cout << "No hay solares válidos.\n";
+        std::cout << "No hay solares validos.\n";
         return;
     }
-    std::cout << "¿Dónde quieres construir?\n";
+    std::cout << "¿Donde quieres construir?\n";
     for (std::size_t i = 0; i < opciones.size(); ++i) {
         std::cout << i + 1 << ". " << opciones[i]->nombre() << " (casas=" << opciones[i]->casas() << (opciones[i]->hotel() ? ",hotel" : "") << ")\n";
     }
@@ -117,9 +117,9 @@ void Juego::intentarConstruir() {
     if (!std::cin || eleccion <= 0 || static_cast<std::size_t>(eleccion) > opciones.size()) return;
     modelo::Propiedad* encontrada = buscarPropiedad(opciones[static_cast<std::size_t>(eleccion - 1)]->nombre());
     modelo::Solar* solar = dynamic_cast<modelo::Solar*>(encontrada);
-    if (!solar) { std::cout << "No se encontró el solar en el índice.\n"; return; }
+    if (!solar) { std::cout << "No se encontro el solar en el indice.\n"; return; }
     int pasos = 1;
-    std::cout << "¿Cuántos pasos de edificación? (1.." << (solar->casas() == 4 ? 1 : 4 - solar->casas()) << ")\n";
+    std::cout << "¿Cuantos pasos de edificacion? (1.." << (solar->casas() == 4 ? 1 : 4 - solar->casas()) << ")\n";
     std::cin >> pasos;
     if (!std::cin) return;
     if (pasos < 1) pasos = 1;
@@ -167,7 +167,7 @@ void Juego::intentarHipotecar() {
     int opt = 0; std::cin >> opt; if (!std::cin) return;
     if (opt <= 0 || static_cast<std::size_t>(opt) > candidatas.size()) return;
     modelo::Propiedad* elegida = buscarPropiedad(candidatas[static_cast<std::size_t>(opt - 1)]->nombre());
-    if (!elegida) { std::cout << "La propiedad no está en el índice.\n"; return; }
+    if (!elegida) { std::cout << "La propiedad no está en el indice.\n"; return; }
     guardarEstado();
     Hipoteca regla;
     regla.hipotecar(elegida, &jugador);
@@ -185,14 +185,14 @@ void Juego::intentarDeshipotecar() {
         if (props[i]->estaHipotecada()) hip.push_back(props[i]);
     }
     if (hip.empty()) return;
-    std::cout << "¿Qué hipoteca quieres cancelar?\n";
+    std::cout << "¿Que hipoteca quieres cancelar?\n";
     for (std::size_t i = 0; i < hip.size(); ++i) {
         std::cout << i + 1 << ". " << hip[i]->nombre() << "\n";
     }
     int opt = 0; std::cin >> opt; if (!std::cin) return;
     if (opt <= 0 || static_cast<std::size_t>(opt) > hip.size()) return;
     modelo::Propiedad* elegida = buscarPropiedad(hip[static_cast<std::size_t>(opt - 1)]->nombre());
-    if (!elegida) { std::cout << "No se encontró esa hipoteca en el índice.\n"; return; }
+    if (!elegida) { std::cout << "No se encontro esa hipoteca en el indice.\n"; return; }
     guardarEstado();
     int deuda = elegida->datos().precio() / 2;
     int interes = (deuda * reglamento.interesHipoteca()) / 100;
@@ -210,7 +210,7 @@ void Juego::usarCartaCarcel() {
     if (jugador.cartasSalirCarcel() > 0) {
         guardarEstado();
         jugador.usarCartaSalirCarcel();
-        std::cout << "Sales de la cárcel usando carta.\n";
+        std::cout << "Sales de la carcel usando carta.\n";
         fase = DebeTirar;
     } else {
         std::cout << "No tienes carta.\n";

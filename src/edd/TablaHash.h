@@ -6,10 +6,28 @@
 
 namespace edd {
 
+/**
+ * @class TablaHash
+ * @brief Índice hash para acceder rápidamente a propiedades según su nombre.
+ *
+ * Se usa para búsquedas rápidas al escribir nombres de propiedades
+ * en comandos como hipotecar, construir, comprar, etc.
+ */
 struct TablaHash {
 public:
+    /**
+     * @brief Constructor.
+     * @pre Ninguna.
+     * @post Tabla vacía inicializada.
+     */
     TablaHash() {}
 
+    /**
+     * @brief Carga todas las propiedades del tablero al índice.
+     * @param t Referencia al tablero cargado.
+     * @pre El tablero debe estar completamente inicializado.
+     * @post El índice contendrá entradas normalizadas de cada propiedad.
+     */
     void cargarDesdeTablero(const modelo::Tablero& t) {
         limpiar();
         int total = t.totalCasillas();
@@ -23,6 +41,13 @@ public:
         }
     }
 
+    /**
+     * @brief Busca una propiedad por su nombre.
+     * @param clave Nombre escrito por el usuario.
+     * @pre Ninguna.
+     * @post No modifica el estado de la tabla.
+     * @return puntero a Propiedad o nullptr si no existe.
+     */
     modelo::Propiedad* buscar(const std::string& clave) const {
         std::string llave = normalizar(clave);
         auto it = indice.find(llave);
@@ -32,11 +57,21 @@ public:
         return nullptr;
     }
 
+    /**
+     * @brief Indica si existe una propiedad con ese nombre.
+     * @pre Ninguna.
+     * @post No modifica la estructura.
+     */
     bool contiene(const std::string& clave) const {
         std::string llave = normalizar(clave);
         return indice.find(llave) != indice.end();
     }
 
+    /**
+     * @brief Limpia el contenido de la tabla.
+     * @pre Ninguna.
+     * @post El índice queda vacío.
+     */
     void limpiar() {
         indice.clear();
     }
@@ -44,6 +79,11 @@ public:
 private:
     std::map<std::string, modelo::Propiedad*> indice;
 
+    /**
+     * @brief Convierte un texto a una clave estándar (minúsculas y sin espacios).
+     * @pre Ninguna.
+     * @post Retorna una versión normalizada del texto.
+     */
     static std::string normalizar(const std::string& texto) {
         std::string salida;
         for (std::size_t i = 0; i < texto.size(); ++i) {

@@ -3,14 +3,14 @@
 
 /**
  * @class Dado
- * @brief Representa un dado de seis caras.
+ * @brief Representa un dado estándar de 6 caras.
  */
 class Dado {
 public:
     /**
      * @brief Lanza el dado.
-     * @pre srand() debe ser llamado al inicio del programa para mejorar aleatoriedad.
-     * @post Retorna un número entre 1 y 6 sin modificar estado interno.
+     * @pre srand() debe haberse llamado en el inicio del programa.
+     * @post Retorna un número aleatorio entre 1 y 6.
      */
     int lanzar();
 };

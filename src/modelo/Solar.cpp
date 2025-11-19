@@ -35,7 +35,7 @@ int Solar::rentaBase(int tirada) const {
 void Solar::alCaer(Juego& juego, Jugador& jugador, int tirada) {
     (void)juego;
     (void)tirada;
-    std::cout << "Estás en " << nombre() << " (grupo " << color_ << ")\n";
+    std::cout << "Estas en " << nombre() << " (grupo " << color_ << ")\n";
 }
 
 }

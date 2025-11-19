@@ -19,7 +19,7 @@ public:
 
     /**
      * @brief Avanza un turno.
-     * @pre Ninguna.
+     * @pre Ninguna
      * @post numeroTurno incrementa en 1.
      */
     void siguiente();

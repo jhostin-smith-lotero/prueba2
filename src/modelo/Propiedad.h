@@ -6,31 +6,69 @@
 
 namespace modelo {
 
-struct Propiedad : public Casilla {
-public:
-    Propiedad(const std::string& nombre, const Escritura& escritura, Casilla::Tipo tipoPropiedad)
-        : Casilla(nombre, tipoPropiedad), escritura_(escritura), dueno_(nullptr), hipotecada_(false) {}
+    /**
+     * @class Propiedad
+     * @brief Clase base para todas las casillas adquiribles (solares, servicios y ferrocarriles).
+     */
+    struct Propiedad : public Casilla {
+    public:
+        /**
+         * @brief Constructor.
+         * @pre escritura válida.
+         * @post Propiedad creada sin dueño y no hipotecada.
+         */
+        Propiedad(const std::string& nombre, const Escritura& escritura, Casilla::Tipo tipoPropiedad)
+            : Casilla(nombre, tipoPropiedad), escritura_(escritura), dueno_(nullptr), hipotecada_(false) {}
 
-    Jugador* dueno() const { return dueno_; }
-    bool estaHipotecada() const { return hipotecada_; }
-    const Escritura& datos() const { return escritura_; }
+        Jugador* dueno() const { return dueno_; }
+        bool estaHipotecada() const { return hipotecada_; }
+        const Escritura& datos() const { return escritura_; }
 
-    bool disponible() const { return dueno_ == nullptr; }
+        /**
+         * @brief Indica si no tiene dueño.
+         * @return true si está disponible.
+         */
+        bool disponible() const { return dueno_ == nullptr; }
 
-    void asignarDueno(Jugador* jugador) { dueno_ = jugador; }
+        /**
+         * @brief Asigna dueño a la propiedad.
+         * @pre jugador no nulo.
+         * @post dueno_ = jugador.
+         */
+        void asignarDueno(Jugador* jugador) { dueno_ = jugador; }
 
-    void hipotecar() { hipotecada_ = true; }
-    void deshipotecar() { hipotecada_ = false; }
+        /**
+         * @brief Hipoteca la propiedad.
+         * @pre Propiedad no debe estar hipotecada.
+         * @post hipotecada_ = true.
+         */
+        void hipotecar() { hipotecada_ = true; }
 
-    virtual int rentaBase(int tirada) const { (void)tirada; return escritura_.rentaBase(); }
+        /**
+         * @brief Cancela la hipoteca.
+         * @pre Propiedad debe estar hipotecada.
+         * @post hipotecada_ = false.
+         */
+        void deshipotecar() { hipotecada_ = false; }
 
-    void alCaer(Juego& juego, Jugador& jugador, int tirada) override;
+        /**
+         * @brief Renta base sin modificaciones (solar redefine).
+         * @return Renta estándar de escritura.
+         */
+        virtual int rentaBase(int tirada) const { (void)tirada; return escritura_.rentaBase(); }
 
-protected:
-    Escritura escritura_;
-    Jugador* dueno_;
-    bool hipotecada_;
-};
+        /**
+         * @brief Lógica al caer en la propiedad.
+         * @pre juego y jugador válidos.
+         * @post Se ejecuta compra o pago de renta según dueño.
+         */
+        void alCaer(Juego& juego, Jugador& jugador, int tirada) override;
+
+    protected:
+        Escritura escritura_;
+        Jugador* dueno_;
+        bool hipotecada_;
+    };
 
 }
 
